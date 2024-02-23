@@ -10,7 +10,6 @@ export default function authMiddleware(req, res, next) {
   }
 
   try {
-    // const secret = process.env.secrets.AUTHSECRETS;
     jwt.verify(token, "secret", (err, decoded) => {
       if (err) {
         return res.status(401).json({ message: "Token inválido" });

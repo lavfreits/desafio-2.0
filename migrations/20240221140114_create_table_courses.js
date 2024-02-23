@@ -4,7 +4,6 @@
  * @returns { Promise<void> }
  */
 exports.up = function (knex) {
-
   return knex.schema.createTable("courses", table => {
     table.increments("id").primary();
     table.string("title").notNullable();

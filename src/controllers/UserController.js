@@ -57,11 +57,14 @@ const UserController = {
       if (!userFromDB) {
         return res.status(404).json({ message: "Usuário não encontrado" });
       }
+      if (userFromDB.username === user.username && user.id !== userFromDB.id) {
+        return res.status(400).json({ message: "Username já cadastrado" });
+      }
       await db("users").where("id", id).update(user);
       res.json({ message: "User updated successfully" });
     } catch (error) {
       console.error(error);
-      res.status(500).json({ message: "Internal server error" });
+      res.status(500).json(error);
     }
   },
 

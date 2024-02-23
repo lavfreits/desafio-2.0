@@ -3,24 +3,22 @@ import { existsOrError, notExistsOrError } from "../utils/validaton.js";
 
 const CourseController = {
   create: async (req, res) => {
-    const { title, description, category_id, professor } = req.body;
+    const course = { ...req.body };
 
     try {
-      existsOrError(title, "Título não informado");
-      existsOrError(description, "Descrição não preenchida");
-      existsOrError(category_id, "Categoria não preenchida");
-      existsOrError(professor, "nome do Professor não preenchido");
+      existsOrError(course.title, "Título não informado");
+      existsOrError(course.description, "Descrição não preenchida");
+      existsOrError(course.category_id, "Categoria não preenchida");
+      existsOrError(course.professor, "Nome do Professor não preenchido");
 
       const courseFromDB = await db("courses")
         .where({ title: course.title }).first();
       notExistsOrError(courseFromDB, "Curso com esse título já existe");
-      const categoryId = await db("categories").where({ title: title }).pluck("id").first();
+      const category = await db("categories").where({ id: course.category_id }).first();
 
-      if (!categoryId) {
+      if (!category) {
         return res.status(400).send("Categoria não encontrada");
       }
-      const course = { title, description, category_id: categoryId };
-
       await db("courses").insert(course);
       res.status(201).json(course);
     } catch (msg) {

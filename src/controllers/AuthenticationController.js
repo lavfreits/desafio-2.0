@@ -21,7 +21,7 @@ const AuthenticationController = {
 
 
     try {
-      // const secret = process.env.AUTHSECRETS;
+
       delete user.password;
       const token = jwt.encode({ ...user }, "secret");
       res.status(200).send({ msg: "autenticado", token });
