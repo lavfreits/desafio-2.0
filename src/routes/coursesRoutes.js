@@ -12,5 +12,7 @@ router
   .get("/courses/:title", authMiddleware, CourseController.getByTitle)
   .put("/courses/:title", authMiddleware, requireProfessor, CourseController.update)
   .delete("/courses/:title", authMiddleware, CourseController.delete);
+router
+  .get("/courses/category/:category_id", authMiddleware, CourseController.getByCategory);
 
 export default router;

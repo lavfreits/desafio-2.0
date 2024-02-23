@@ -69,6 +69,32 @@ const CourseController = {
     }
   },
 
+  getByCategory: async (req, res) => {
+    const { category_id } = req.params;
+    let { page, limit } = req.query;
+    page = parseInt(page) || 1;
+    limit = parseInt(limit) || 10;
+    console.log(page, limit, category_id);
+
+    const category = db("categories").where("id", category_id).first();
+    if (!category) {
+      return res.status(404).json({ message: "Categoria não encontrada" });
+    }
+    try {
+      console.log(category_id);
+      const courses = await db("courses")
+        .where("category_id", category_id)
+        .limit(limit)
+        .offset((page - 1) * limit);
+      console.log(courses);
+      res.json(courses);
+
+    } catch (error) {
+      console.error(error);
+      res.status(500).send(error || "Internal server error");
+    }
+  },
+
   delete: async (req, res) => {
     try {
       const { title } = req.params;
